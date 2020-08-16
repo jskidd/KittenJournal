@@ -1,0 +1,41 @@
+﻿@model IEnumerable<KittenJournal.Models.ViewModels.FosterViewModel>
+
+@{
+    ViewData["Title"] = "Fosters";
+}
+
+<h1>Fosters</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">New Foster</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.foster.Name)
+            </th>
+            <th>
+                Fostering            
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.foster.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.KittensCount)
+            </td>
+            <td>
+                <a asp-action="Details" asp-route-id="@item.foster.Id" class="btn btn-primary">Details</a>
+                <a asp-action="Edit" asp-route-id="@item.foster.Id" class="btn btn-secondary">Edit</a>
+                <a asp-action="Delete" asp-route-id="@item.foster.Id" class="btn btn-danger">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

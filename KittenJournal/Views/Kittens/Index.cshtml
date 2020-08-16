@@ -1,0 +1,53 @@
+﻿@model IEnumerable<KittenJournal.Models.ViewModels.KittenViewModel>
+
+@{
+    ViewData["Title"] = "Kittens";
+}
+
+<h1>Kittens</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">New Kitten</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Kitten.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Kitten.CurrentWeight)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Kitten.Sex)
+            </th>
+            <th>
+                Foster
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Kitten.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Kitten.CurrentWeight)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Kitten.Sex)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Foster.Name)
+            </td>
+            <td>
+                <a asp-action="Details" asp-route-id="@item.Kitten.Id" class="btn btn-primary">Details</a>
+                <a asp-action="Edit" asp-route-id="@item.Kitten.Id" class="btn btn-secondary">Edit</a>
+                <a asp-action="Delete" asp-route-id="@item.Kitten.Id" class="btn btn-danger">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
