@@ -1,5 +1,7 @@
 ﻿using KittenJournal.Models;
+using KittenJournal.Models.Identity;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -11,6 +13,8 @@ namespace KittenJournal.DAL
 {
     public static class SeedDB
     {
+        private const string adminUser = "Admin";
+        private const string adminPassword = "Secret123$";
         public static void Migrate(IApplicationBuilder app)
         {
             AppDbContext ctx = app.ApplicationServices.CreateScope().ServiceProvider.GetRequiredService<AppDbContext>();
@@ -87,6 +91,49 @@ namespace KittenJournal.DAL
             }
 
             await ctx.SaveChangesAsync();
+        }
+
+        public static async void SeedIdentity(IApplicationBuilder app)
+        {
+            AppIdentityContext context = app.ApplicationServices
+            .CreateScope().ServiceProvider
+            .GetRequiredService<AppIdentityContext>();
+            if (context.Database.GetPendingMigrations().Any())
+            {
+                context.Database.Migrate();
+            }
+            UserManager<KittenJournalUser> userManager = app.ApplicationServices
+            .CreateScope().ServiceProvider
+            .GetRequiredService<UserManager<KittenJournalUser>>();
+            KittenJournalUser user = await userManager.FindByIdAsync(adminUser);
+            if (user == null)
+            {
+                user = new KittenJournalUser("Admin");
+                user.Email = "admin@example.com";
+                user.PhoneNumber = "555-1234";
+                await userManager.CreateAsync(user, adminPassword);
+            }
+
+            RoleManager<IdentityRole> roleManager = app.ApplicationServices
+            .CreateScope().ServiceProvider
+            .GetRequiredService<RoleManager<IdentityRole>>();
+
+            IdentityRole adminRole = await roleManager.FindByNameAsync("Administrator");
+            if (adminRole == null)
+            { 
+                adminRole = new IdentityRole("Administrator");
+                await roleManager.CreateAsync(adminRole);
+            }
+
+            await userManager.AddToRoleAsync(user, "Administrator");
+
+            IdentityRole fosterRole = await roleManager.FindByNameAsync("Foster");
+            if (fosterRole == null)
+            {
+                fosterRole = new IdentityRole("Foster");
+                await roleManager.CreateAsync(fosterRole);
+            }
+            
         }
     }
 }

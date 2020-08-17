@@ -8,22 +8,30 @@ using Microsoft.EntityFrameworkCore;
 using KittenJournal.DAL;
 using KittenJournal.Models;
 using KittenJournal.Models.ViewModels;
+using KittenJournal.Models.Identity;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace KittenJournal
 {
     public class FeedingsController : Controller
     {
         private readonly AppDbContext _context;
+        private readonly UserManager<KittenJournalUser> _userManager;
 
-        public FeedingsController(AppDbContext context)
+        public FeedingsController(AppDbContext context, UserManager<KittenJournalUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Feedings
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Index()
         {
             List<FeedingViewModel> vm = new List<FeedingViewModel>();
+
             foreach (var f in (await _context.Feedings.OrderByDescending(f => f.Timestamp).ToListAsync()))
             {
                 vm.Add(new FeedingViewModel() { 
@@ -35,6 +43,7 @@ namespace KittenJournal
         }
 
         // GET: Feedings/Create
+        [Authorize]
         public IActionResult Create(int? kittenId)
         {
             ViewBag.KittenId = kittenId;
@@ -46,6 +55,7 @@ namespace KittenJournal
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Create([Bind("Id,StartingWeight,EndWeight,Timestamp,KittenId")] Feeding feeding)
         {
             if (ModelState.IsValid)
@@ -63,6 +73,7 @@ namespace KittenJournal
         }
 
         // GET: Feedings/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -75,9 +86,15 @@ namespace KittenJournal
             {
                 return NotFound();
             }
-            ViewBag.KittenId = feeding.KittenId;
-            ViewBag.KittenName = _context.Kittens.Where(k => k.Id == feeding.KittenId).FirstOrDefault().Name;
-            return View(feeding);
+
+            if (User.IsInRole("Administrator") || (await _userManager.GetUserAsync(User)).FosterId ==  _context.Kittens.Where(k => k.Id == feeding.KittenId).FirstOrDefault().FosterId)
+            {
+                ViewBag.KittenId = feeding.KittenId;
+                ViewBag.KittenName = _context.Kittens.Where(k => k.Id == feeding.KittenId).FirstOrDefault().Name;
+                return View(feeding);
+            }
+
+            return Redirect("/Identity/Account/AccessDenied");
         }
 
         // POST: Feedings/Edit/5
@@ -85,9 +102,15 @@ namespace KittenJournal
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Edit(int id, [Bind("Id,StartingWeight,EndWeight,Timestamp,KittenId")] Feeding feeding)
         {
-            if (id != feeding.Id)
+            if (!(User.IsInRole("Administrator") || (await _userManager.GetUserAsync(User)).FosterId == _context.Kittens.Where(k => k.Id == feeding.KittenId).FirstOrDefault().FosterId))
+            {
+                return Redirect("/Identity/Account/AccessDenied");
+            }
+
+                if (id != feeding.Id)
             {
                 return NotFound();
             }
@@ -116,6 +139,7 @@ namespace KittenJournal
         }
 
         // GET: Feedings/Delete/5
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -136,6 +160,7 @@ namespace KittenJournal
         // POST: Feedings/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var feeding = await _context.Feedings.FindAsync(id);

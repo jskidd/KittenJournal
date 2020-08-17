@@ -5,10 +5,13 @@
 }
 
 <h1>Kittens</h1>
+@if (User.IsInRole("Administrator"))
+{
+    <p>
+        <a asp-action="Create" class="btn btn-primary">New Kitten</a>
+    </p>
 
-<p>
-    <a asp-action="Create" class="btn btn-primary">New Kitten</a>
-</p>
+}
 <table class="table">
     <thead>
         <tr>
@@ -28,26 +31,31 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Kitten.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Kitten.CurrentWeight)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Kitten.Sex)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Foster.Name)
-            </td>
-            <td>
-                <a asp-action="Details" asp-route-id="@item.Kitten.Id" class="btn btn-primary">Details</a>
-                <a asp-action="Edit" asp-route-id="@item.Kitten.Id" class="btn btn-secondary">Edit</a>
-                <a asp-action="Delete" asp-route-id="@item.Kitten.Id" class="btn btn-danger">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Kitten.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Kitten.CurrentWeight)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Kitten.Sex)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Foster.Name)
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Kitten.Id" class="btn btn-primary">Details</a>
+                    @if (User.IsInRole("Administrator"))
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.Kitten.Id" class="btn btn-secondary">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@item.Kitten.Id" class="btn btn-danger">Delete</a>
+
+                    }
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

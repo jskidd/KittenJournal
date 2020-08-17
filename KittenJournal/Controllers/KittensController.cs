@@ -8,24 +8,40 @@ using Microsoft.EntityFrameworkCore;
 using KittenJournal.DAL;
 using KittenJournal.Models;
 using KittenJournal.Models.ViewModels;
+using Microsoft.AspNetCore.Identity;
+using KittenJournal.Models.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace KittenJournal
 {
     public class KittensController : Controller
     {
         private readonly AppDbContext _context;
+        private readonly UserManager<KittenJournalUser> _userManager;
 
-        public KittensController(AppDbContext context)
+        public KittensController(AppDbContext context, UserManager<KittenJournalUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Kittens
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             List<KittenViewModel> vm = new List<KittenViewModel>();
+            List<Kitten> kittens;
 
-            foreach (var kitten in _context.Kittens.ToList())
+            if (User.IsInRole("Foster"))
+            {
+                KittenJournalUser user = await _userManager.GetUserAsync(User);
+                kittens = await _context.Kittens.Where(k => k.FosterId == user.FosterId).ToListAsync();
+            } else
+            {
+                kittens = await _context.Kittens.ToListAsync();
+            }
+
+            foreach (var kitten in kittens)
             {
                 vm.Add(new KittenViewModel
                 {
@@ -38,6 +54,7 @@ namespace KittenJournal
         }
 
         // GET: Kittens/Details/5
+        [Authorize]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -52,15 +69,21 @@ namespace KittenJournal
                 return NotFound();
             }
 
-            return View(new KittenViewModel()
+            if (User.IsInRole("Administrator") || (await _userManager.GetUserAsync(User)).FosterId == kitten.FosterId)
             {
-                Kitten = kitten,
-                Foster = _context.Fosters.Where(f => f.Id == kitten.FosterId).FirstOrDefault(),
-                Feedings = await _context.Feedings.Where(f => f.KittenId == kitten.Id).OrderByDescending(f => f.Timestamp).ToListAsync()
-            }); ;
+                return View(new KittenViewModel()
+                {
+                    Kitten = kitten,
+                    Foster = _context.Fosters.Where(f => f.Id == kitten.FosterId).FirstOrDefault(),
+                    Feedings = await _context.Feedings.Where(f => f.KittenId == kitten.Id).OrderByDescending(f => f.Timestamp).ToListAsync()
+                }); ;
+            }
+
+            return Redirect("/Identity/Account/AccessDenied");
         }
 
         // GET: Kittens/Create
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Create()
         {
             ViewBag.Fosters = await _context.Fosters.ToListAsync();
@@ -72,6 +95,7 @@ namespace KittenJournal
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Create([Bind("Id,Name,CurrentWeight,Sex,FosterId")] Kitten kitten)
         {
             if (ModelState.IsValid)
@@ -84,6 +108,7 @@ namespace KittenJournal
         }
 
         // GET: Kittens/Edit/5
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -111,6 +136,7 @@ namespace KittenJournal
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,CurrentWeight,Sex,FosterId")] Kitten kitten)
         {
             if (id != kitten.Id)
@@ -142,6 +168,7 @@ namespace KittenJournal
         }
 
         // GET: Kittens/Delete/5
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -162,9 +189,11 @@ namespace KittenJournal
         // POST: Kittens/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var kitten = await _context.Kittens.FindAsync(id);
+            _context.Feedings.RemoveRange(_context.Feedings.Where(f => f.KittenId == id));
             _context.Kittens.Remove(kitten);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

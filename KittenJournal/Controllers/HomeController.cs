@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using KittenJournal.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace KittenJournal.Controllers
 {
@@ -17,9 +18,17 @@ namespace KittenJournal.Controllers
         {
             _logger = logger;
         }
-
+        
+        [Authorize]
         public IActionResult Index()
         {
+            if (User.IsInRole("Administrator"))
+            {
+                return RedirectToAction("Index", "Fosters");
+            } else if (User.IsInRole("Foster"))
+            {
+                return RedirectToAction("Index", "Kittens");
+            }
             return View();
         }
 

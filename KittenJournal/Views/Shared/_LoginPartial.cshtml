@@ -1,0 +1,40 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using KittenJournal.Models.Identity
+
+@inject SignInManager<KittenJournalUser> SignInManager
+@inject UserManager<KittenJournalUser> UserManager
+@inject RoleManager<IdentityRole> RoleManager
+
+    <ul class="navbar-nav">
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <li class="nav-item">
+                <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">My Account</a>
+            </li>
+            <li class="nav-item">
+                <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                    <button id="logout" type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+                </form>
+            </li>
+            @if (User.IsInRole("Administrator"))
+            {
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Fosters" asp-action="Index">Fosters</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Feedings" asp-action="Index">Feedings</a>
+                </li>
+
+            }
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Kittens" asp-action="Index">Kittens</a>
+            </li>
+
+        }
+        else
+        {
+            <li class="nav-item">
+                <a class="nav-link text-dark" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a>
+            </li>
+        }
+    </ul>
