@@ -25,7 +25,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Sex" class="control-label"></label>
-                <select asp-for="Sex" class="form-control" >
+                <select asp-for="Sex" class="form-control">
                     @foreach (string s in Model.SexList)
                     {
                         <option value="@s">@s</option>
@@ -33,17 +33,23 @@
                 </select>
                 <span asp-validation-for="Sex" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label class="control-label" asp-for="FosterId"></label>
-                <select asp-for="FosterId" class="form-control">
-                    <option value="null">None</option>
-                    @foreach (Foster f in Model.FostersList)
-                    {
-                        <option value="@f.Id">@f.Name</option>
-                    }
-                </select>
-                <span asp-validation-for="FosterId" class="text-danger"></span>
-            </div>
+            @if (User.IsInRole("Administrator"))
+            {
+                <div class="form-group">
+                    <label class="control-label" asp-for="FosterId"></label>
+                    <select asp-for="FosterId" class="form-control">
+                        <option value="null">None</option>
+                        @foreach (Foster f in Model.FostersList)
+                        {
+                            <option value="@f.Id">@f.Name</option>
+                        }
+                    </select>
+                    <span asp-validation-for="FosterId" class="text-danger"></span>
+                </div>
+            } else
+            {
+                <input asp-for="FosterId" type="hidden" />
+            }
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
                 <a asp-action="Index" class="btn btn-secondary">Back to List</a>

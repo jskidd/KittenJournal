@@ -5,45 +5,53 @@
 }
 
 <h1>Feedings</h1>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Kitten.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Feeding.Timestamp)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Feeding.StartingWeight)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Feeding.EndWeight)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Kitten.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Feeding.Timestamp)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Feeding.StartingWeight)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Feeding.EndWeight)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Feeding.Id" class="btn btn-primary">Edit</a>
-                <a asp-action="Delete" asp-route-id="@item.Feeding.Id" class="btn btn-danger">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div>
+    <form asp-controller="Feedings" asp-action="Index">
+        <div class="form-group">
+            <input type="submit" value="Search" class="btn btn-success" />
+            <input type="text" name="searchString" class="form-control input-search" />
+        </div>
+    </form>
+</div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Kitten.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Feeding.Timestamp)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Feeding.StartingWeight)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Feeding.EndWeight)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Kitten.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Feeding.Timestamp)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Feeding.StartingWeight)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Feeding.EndWeight)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Feeding.Id" class="btn btn-primary">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@item.Feeding.Id" class="btn btn-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>

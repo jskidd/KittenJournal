@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using KittenJournal.DAL;
 using KittenJournal.Models;
@@ -39,6 +37,39 @@ namespace KittenJournal
             } else
             {
                 kittens = await _context.Kittens.ToListAsync();
+            }
+
+            foreach (var kitten in kittens)
+            {
+                vm.Add(new KittenViewModel
+                {
+                    Kitten = kitten,
+                    Foster = _context.Fosters.Find(kitten.FosterId)
+                });
+            }
+
+            return View(vm.ToList());
+        }
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> Index(string searchString)
+        {
+            if (string.IsNullOrEmpty(searchString))
+            {
+                return View();
+            }
+
+            List<KittenViewModel> vm = new List<KittenViewModel>();
+            List<Kitten> kittens;
+
+            if (User.IsInRole("Foster"))
+            {
+                KittenJournalUser user = await _userManager.GetUserAsync(User);
+                kittens = await _context.Kittens.Where(k => k.FosterId == user.FosterId).Where(k => k.Name.Contains(searchString)).ToListAsync();
+            }
+            else
+            {
+                kittens = await _context.Kittens.Where(k => k.Name.Contains(searchString)).ToListAsync();
             }
 
             foreach (var kitten in kittens)
@@ -108,7 +139,7 @@ namespace KittenJournal
         }
 
         // GET: Kittens/Edit/5
-        [Authorize(Roles = "Administrator")]
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -136,7 +167,7 @@ namespace KittenJournal
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Administrator")]
+        [Authorize]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,CurrentWeight,Sex,FosterId")] Kitten kitten)
         {
             if (id != kitten.Id)

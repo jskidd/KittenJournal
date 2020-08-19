@@ -39,6 +39,27 @@ namespace KittenJournal
             }
             return View(fosters.ToList());
         }
+        [Authorize(Roles = "Administrator")]
+        [HttpPost]
+        public async Task<IActionResult> Index(string SearchString)
+        {
+            if (string.IsNullOrEmpty(SearchString))
+            {
+                return View();
+            }
+
+            List<FosterViewModel> fosters = new List<FosterViewModel>();
+            foreach (var f in (await _context.Fosters.Where(f => f.Name.Contains(SearchString)).ToListAsync()))
+            {
+                FosterViewModel fvm = new FosterViewModel()
+                {
+                    foster = f,
+                    kittens = _context.Kittens.Where(k => k.FosterId == f.Id)
+                };
+                fosters.Add(fvm);
+            }
+            return View(fosters.ToList());
+        }
 
         // GET: Fosters/Details/5
         [Authorize(Roles = "Administrator")]
@@ -78,26 +99,49 @@ namespace KittenJournal
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> Create([Bind("Id,Name,Address,City,State,ZipCode,Email,PhoneNumber")] Foster foster)
+        public async Task<IActionResult> Create([Bind("Id,Name,Address,City,State,ZipCode,Email,PhoneNumber,Password,ConfirmPassword")] CreateEditFosterViewModel vm)
         {
             if (ModelState.IsValid)
             {
+                Foster foster = new Foster()
+                {
+                    Name = vm.Name,
+                    Address = vm.Address,
+                    City = vm.City,
+                    State = vm.State,
+                    ZipCode = vm.ZipCode,
+                    Email = vm.Email,
+                    PhoneNumber = vm.PhoneNumber
+                };
                 _context.Add(foster);
                 await _context.SaveChangesAsync();
 
                 KittenJournalUser user = new KittenJournalUser()
                 {
-                    UserName = foster.Email,
-                    Email = foster.Email,
-                    PhoneNumber = foster.PhoneNumber,
+                    UserName = vm.Email,
+                    Email = vm.Email,
+                    PhoneNumber = vm.PhoneNumber,
                     FosterId = foster.Id,
                 };
-                await _userManager.CreateAsync(user, "Welcome123!");
+
+                IdentityResult result = await _userManager.CreateAsync(user, vm.Password);
+
+                if (!result.Succeeded)
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+
+                    return View();
+                }
+
                 await _userManager.AddToRoleAsync(user, "Foster");
 
                 return RedirectToAction(nameof(Index));
+
             }
-            return View(foster);
+            return View(vm);
         }
 
         // GET: Fosters/Edit/5
@@ -114,6 +158,7 @@ namespace KittenJournal
             {
                 return NotFound();
             }
+
             return View(foster);
         }
 
@@ -134,7 +179,16 @@ namespace KittenJournal
             {
                 try
                 {
+                    KittenJournalUser user = _userManager.Users.Where(u => u.FosterId == foster.Id).FirstOrDefault();
+
+                    user.Email = foster.Email;
+                    user.UserName = foster.Email;
+                    user.PhoneNumber = foster.PhoneNumber;
+
+                    await _userManager.UpdateAsync(user);
+
                     _context.Update(foster);
+                    
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -184,9 +238,15 @@ namespace KittenJournal
             }
             _context.Fosters.Remove(foster);
             await _context.SaveChangesAsync();
+
+            KittenJournalUser user = await _userManager.FindByEmailAsync(foster.Email);
+            
+            if (user != null) {
+                await _userManager.DeleteAsync(user);
+            }
+
             return RedirectToAction(nameof(Index));
         }
-
         private bool FosterExists(int id)
         {
             return _context.Fosters.Any(e => e.Id == id);

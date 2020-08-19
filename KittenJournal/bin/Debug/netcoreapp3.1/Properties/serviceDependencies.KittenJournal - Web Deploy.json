@@ -1,0 +1,16 @@
+{
+  "dependencies": {
+    "mssql2": {
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourcegroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/kittenjournaldbserver/databases/KittenJournal_db",
+      "type": "mssql.azure",
+      "connectionId": "Default",
+      "secretStore": "AzureAppSettings"
+    },
+    "mssql3": {
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourcegroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/kittenjournaldbserver/databases/KittenJournal_Identity",
+      "type": "mssql.azure",
+      "connectionId": "Identity",
+      "secretStore": "AzureAppSettings"
+    }
+  }
+}

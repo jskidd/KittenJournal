@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using KittenJournal.DAL;
 using KittenJournal.Models;
@@ -11,7 +9,6 @@ using KittenJournal.Models.ViewModels;
 using KittenJournal.Models.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.CodeAnalysis.CSharp;
 
 namespace KittenJournal
 {
@@ -39,6 +36,34 @@ namespace KittenJournal
                     Kitten =  _context.Kittens.Where(k => k.Id ==  f.KittenId).FirstOrDefault()
                 });
             }
+            return View(vm);
+        }
+
+        [Authorize(Roles = "Administrator")]
+        [HttpPost]
+        public async Task<IActionResult> Index(string searchString)
+        {
+            List<FeedingViewModel> vm = new List<FeedingViewModel>();
+
+            if (string.IsNullOrEmpty(searchString))
+            {
+                return View();
+            }
+
+            List<Kitten> kittens = await _context.Kittens.Where(k => k.Name.Contains(searchString)).ToListAsync();
+
+            foreach(var k in kittens)
+            {
+                foreach(var f in (await _context.Feedings.Where(f => f.KittenId == k.Id).ToListAsync()))
+                {
+                    vm.Add(new FeedingViewModel()
+                    {
+                        Feeding = f,
+                        Kitten = _context.Kittens.Where(k => k.Id == f.KittenId).FirstOrDefault()
+                    });
+                }
+            }
+
             return View(vm);
         }
 

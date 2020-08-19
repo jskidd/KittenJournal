@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30128.74
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KittenJournal", "KittenJournal\KittenJournal.csproj", "{CC5A281C-08B3-4F09-B40C-4F4187A47943}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KittenJournal", "KittenJournal\KittenJournal.csproj", "{CC5A281C-08B3-4F09-B40C-4F4187A47943}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KittenJournal.Tests", "KittenJournal.Tests\KittenJournal.Tests.csproj", "{6F201B4E-285E-40C5-8AFF-6CF8500855F9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{CC5A281C-08B3-4F09-B40C-4F4187A47943}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC5A281C-08B3-4F09-B40C-4F4187A47943}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CC5A281C-08B3-4F09-B40C-4F4187A47943}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F201B4E-285E-40C5-8AFF-6CF8500855F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F201B4E-285E-40C5-8AFF-6CF8500855F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F201B4E-285E-40C5-8AFF-6CF8500855F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F201B4E-285E-40C5-8AFF-6CF8500855F9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

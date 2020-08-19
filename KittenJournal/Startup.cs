@@ -1,13 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using KittenJournal.DAL;
 using KittenJournal.Models.Identity;
+using KittenJournal.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -36,6 +33,8 @@ namespace KittenJournal
                 opts.LoginPath = "/Identity/Account/Login";
                 opts.AccessDeniedPath = "/Identity/Account/AccessDenied";
             });
+            services.AddTransient<IEmailSender, EmailSender>();
+            //services.Configure<AuthMessageSenderOptions>(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -44,6 +43,9 @@ namespace KittenJournal
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                SeedDB.Migrate(app);
+                SeedDB.SeedData(app);
+                SeedDB.SeedIdentity(app);
             }
             else
             {
@@ -66,10 +68,6 @@ namespace KittenJournal
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
-
-            SeedDB.Migrate(app);
-            SeedDB.SeedData(app);
-            SeedDB.SeedIdentity(app);
         }
     }
 }

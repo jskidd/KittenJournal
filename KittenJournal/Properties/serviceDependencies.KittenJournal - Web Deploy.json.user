@@ -1,0 +1,30 @@
+{
+  "dependencies": {
+    "mssql3": {
+      "restored": true,
+      "restoreTime": "2020-08-19T21:28:58.9616879Z"
+    },
+    "mssql2": {
+      "restored": true,
+      "restoreTime": "2020-08-19T21:26:27.6508745Z"
+    }
+  },
+  "parameters": {
+    "mssql3.subscriptionId": {
+      "Type": "subscription",
+      "Value": "55a6e9f7-86f5-4be3-9a87-f2de10b91354"
+    },
+    "mssql2.subscriptionId": {
+      "Type": "subscription",
+      "Value": "55a6e9f7-86f5-4be3-9a87-f2de10b91354"
+    },
+    "mssql2.resourceGroupName": {
+      "Type": "resourceGroup",
+      "Value": "KittenJournal20200819171834ResourceGroup"
+    },
+    "mssql3.resourceGroupName": {
+      "Type": "resourceGroup",
+      "Value": "KittenJournal20200819171834ResourceGroup"
+    }
+  }
+}

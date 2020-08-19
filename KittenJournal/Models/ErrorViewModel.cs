@@ -1,5 +1,3 @@
-using System;
-
 namespace KittenJournal.Models
 {
     public class ErrorViewModel

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is used by the publish/package process of your Web project. You can customize the behavior of this process
+by editing this MSBuild file. In order to learn more about this please visit https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAclgZ34r+vku1JtieomA4+wAAAAACAAAAAAADZgAAwAAAABAAAAAwOI2AQtvu6mbCq6y2lm6CAAAAAASAAACgAAAAEAAAADLCHc+KNzyxAm/QufUHYECAAAAAeCKKkynnZ0CRdpUmdNNej5nKwzSLYaeqUYHOSFd+CDDRIxe8ozd1+gqdwEJwyaBleBvtiaGNUQy0tUo1a4qczdQMZvcQjOgVm3hEGuBwUQnWj2hGc6fTTvUC0RpLYE//jf4JzAGSOXtcO6jvXfUzMNGvrERMreQTsYau9SsNjZMUAAAAj6HcYn0/TFL84CBzC5IaeEsqrCY=</EncryptedPassword>
+  </PropertyGroup>
+  <ItemGroup>
+    <DestinationConnectionStrings Include="Default">
+      <Value>Data Source=tcp:kittenjournaldbserver.database.windows.net,1433%3bInitial Catalog=KittenJournal_db%3bUser Id=dbconnection%40kittenjournaldbserver%3bPassword=frej9D+E+R_vuJ#</Value>
+    </DestinationConnectionStrings>
+    <DestinationConnectionStrings Include="Identity">
+      <Value>Data Source=tcp:kittenjournaldbserver.database.windows.net,1433%3bInitial Catalog=KittenJournal_db%3bUser Id=dbconnection%40kittenjournaldbserver%3bPassword=frej9D+E+R_vuJ#</Value>
+    </DestinationConnectionStrings>
+  </ItemGroup>
+  <ItemGroup>
+    <EFMigrations Include="KittenJournal.DAL.AppDbContext">
+      <Value>Data Source=tcp:kittenjournaldbserver.database.windows.net,1433%3bInitial Catalog=KittenJournal_db%3bUser Id=dbconnection%40kittenjournaldbserver%3bPassword=frej9D+E+R_vuJ#</Value>
+    </EFMigrations>
+    <EFMigrations Include="KittenJournal.DAL.AppIdentityContext">
+      <Value>Data Source=tcp:kittenjournaldbserver.database.windows.net,1433%3bInitial Catalog=KittenJournal_db%3bUser Id=dbconnection%40kittenjournaldbserver%3bPassword=frej9D+E+R_vuJ#</Value>
+    </EFMigrations>
+  </ItemGroup>
+</Project>

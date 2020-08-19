@@ -1,25 +1,21 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\john\\source\\repos\\KittenJournal\\KittenJournal\\KittenJournal.csproj": {}
+    "C:\\Users\\jkidd\\source\\repos\\KittenJournal\\KittenJournal\\KittenJournal.csproj": {}
   },
   "projects": {
-    "C:\\Users\\john\\source\\repos\\KittenJournal\\KittenJournal\\KittenJournal.csproj": {
+    "C:\\Users\\jkidd\\source\\repos\\KittenJournal\\KittenJournal\\KittenJournal.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\john\\source\\repos\\KittenJournal\\KittenJournal\\KittenJournal.csproj",
+        "projectUniqueName": "C:\\Users\\jkidd\\source\\repos\\KittenJournal\\KittenJournal\\KittenJournal.csproj",
         "projectName": "KittenJournal",
-        "projectPath": "C:\\Users\\john\\source\\repos\\KittenJournal\\KittenJournal\\KittenJournal.csproj",
-        "packagesPath": "C:\\Users\\john\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\john\\source\\repos\\KittenJournal\\KittenJournal\\obj\\",
+        "projectPath": "C:\\Users\\jkidd\\source\\repos\\KittenJournal\\KittenJournal\\KittenJournal.csproj",
+        "packagesPath": "C:\\Users\\jkidd\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\jkidd\\source\\repos\\KittenJournal\\KittenJournal\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Microsoft\\Xamarin\\NuGet\\"
-        ],
         "configFilePaths": [
-          "C:\\Users\\john\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+          "C:\\Users\\jkidd\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.1"
@@ -93,7 +89,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.300\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.401\\RuntimeIdentifierGraph.json"
         }
       }
     }

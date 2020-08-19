@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <parameter name="IIS Web Application Name" description="" value="KittenJournal" tags="IisApp">
+    <parameterEntry kind="ProviderPath" scope="IisApp" match="^C:\\Users\\jkidd\\source\\repos\\KittenJournal\\KittenJournal\\obj\\Release\\netcoreapp3\.1\\PubTmp\\Out\\$" />
+  </parameter>
+  <parameter name="KittenJournal.DAL.AppDbContext" description="" value="Data Source=tcp:kittenjournaldbserver.database.windows.net,1433;Initial Catalog=KittenJournal_db;User Id=dbconnection@kittenjournaldbserver;Password=frej9D+E+R_vuJ#" tags="dbfullsql">
+    <parameterEntry kind="ProviderPath" scope="dbfullsql" match="^C:\\Users\\jkidd\\source\\repos\\KittenJournal\\KittenJournal\\obj\\Release\\netcoreapp3\.1\\PubTmp\\EFSQLScripts\\KittenJournal\.DAL\.AppDbContext\.sql$" />
+  </parameter>
+  <parameter name="KittenJournal.DAL.AppIdentityContext" description="" value="Data Source=tcp:kittenjournaldbserver.database.windows.net,1433;Initial Catalog=KittenJournal_db;User Id=dbconnection@kittenjournaldbserver;Password=frej9D+E+R_vuJ#" tags="dbfullsql">
+    <parameterEntry kind="ProviderPath" scope="dbfullsql" match="^C:\\Users\\jkidd\\source\\repos\\KittenJournal\\KittenJournal\\obj\\Release\\netcoreapp3\.1\\PubTmp\\EFSQLScripts\\KittenJournal\.DAL\.AppIdentityContext\.sql$" />
+  </parameter>
+</parameters>

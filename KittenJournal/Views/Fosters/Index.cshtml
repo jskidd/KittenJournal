@@ -5,7 +5,14 @@
 }
 
 <h1>Fosters</h1>
-
+<div>
+    <form asp-controller="Fosters" asp-action="Index">
+        <div class="form-group">
+            <input type="submit" value="Search" class="btn btn-success" />
+            <input type="text" name="searchString" class="form-control input-search" />
+        </div>
+    </form>
+</div>
 <p>
     <a asp-action="Create" class="btn btn-primary">New Foster</a>
 </p>
